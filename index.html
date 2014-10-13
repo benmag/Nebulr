@@ -1,0 +1,264 @@
+<html>
+<head>
+	<title>Nebulr</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+	<style>
+	body {
+		margin: 0;
+	}
+	.colorgraph {
+		margin-top:0px;
+		height: 5px;
+		border-top: 0;
+		background: #c4e17f;
+		background-image: -webkit-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+		background-image: -moz-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+		background-image: -o-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+		background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+	}
+
+
+	.avatar {
+		border: 1px solid silver;
+		box-shadow: rgba(0,0,0,.2) 0 0 3px;
+		border-radius: 50%;
+		-moz-animation: shadow .8s ease-in;
+		-webkit-animation: shadow .8s ease-in;
+		animation: shadow .8s ease-in;
+		transition: all .2s ease-in-out;
+		max-width: 95px;
+	}
+
+	.info {
+		padding-left: 20px;
+	}
+
+	.name {
+		font-size: 1.7em;
+		font-weight: 700;
+	}
+
+	#search {
+	    position: fixed;
+	    top: 0px;
+	    left: 0px;
+	    width: 100%;
+	    height: 100%;
+	    z-index: 200;
+	    /*background-color: rgba(0, 0, 0, 0.7);*/
+	    background-color: #ec5148;
+	    -webkit-transition: all 0.5s ease-in-out;
+		-moz-transition: all 0.5s ease-in-out;
+		-o-transition: all 0.5s ease-in-out;
+		-ms-transition: all 0.5s ease-in-out;
+		transition: all 0.5s ease-in-out;
+
+	    -webkit-transform: translate(0px, -100%) scale(0, 0);
+		-moz-transform: translate(0px, -100%) scale(0, 0);
+		-o-transform: translate(0px, -100%) scale(0, 0);
+		-ms-transform: translate(0px, -100%) scale(0, 0);
+		transform: translate(0px, -100%) scale(0, 0);
+	    
+	    opacity: 0;
+	}
+
+	#search.open {
+	    -webkit-transform: translate(0px, 0px) scale(1, 1);
+	    -moz-transform: translate(0px, 0px) scale(1, 1);
+		-o-transform: translate(0px, 0px) scale(1, 1);
+		-ms-transform: translate(0px, 0px) scale(1, 1);
+		transform: translate(0px, 0px) scale(1, 1); 
+	    opacity: 1;
+	}
+
+	#search input[type="search"] {
+	    position: absolute;
+	    top: 50%;
+	    width: 100%;
+	    /*color: rgb(255, 255, 255);*/
+	    color:#fff;
+	    background: rgba(0, 0, 0, 0);
+	    font-size: 60px;
+	    font-weight: 300;
+	    /*text-align: center;*/
+	    border: 0px;
+	    margin: 0px auto;
+	    margin-top: -51px;
+	    padding-left: 30px;
+	    padding-right: 30px;
+	    outline: none;
+	}
+	#search .btn {
+	    position: absolute;
+	    top: 50%;
+	    left: 50%;
+	    margin-top: 61px;
+	    margin-left: -45px;
+	}
+	#search .close {
+	    position: fixed;
+	    top: 15px;
+	    right: 15px;
+	    color: #fff;
+		background-color: #428bca;
+		border-color: #357ebd;
+		opacity: 1;
+		padding: 10px 17px;
+		font-size: 27px;
+	}
+
+	.list-group-item {
+		cursor: pointer;
+	}
+	</style>
+</head>
+
+<body>
+<hr class="colorgraph">
+<div class="row">
+    <div class="col-xs-12 col-sm-offset-3 col-sm-6">
+        <div class="panel panel-default">
+            <ul class="list-group" id="contact-list">
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="search">
+    <!--<button type="button" class="close">×</button>-->
+    <form>
+        <input type="search" id="user" name="user" value="" placeholder="" />
+        <!-- <button type="submit" class="btn btn-primary">Search</button> -->
+    </form>
+</div>
+<li id="example-user" class="list-group-item" style="display:none;">
+    <div class="col-xs-3 col-sm-3">
+        <img src="http://api.randomuser.me/portraits/men/49.jpg" alt="" class="img-responsive img-circle avatar" />
+    </div>
+    <div class="col-xs-9 col-sm-9">
+        <span class="name"></span><br/>
+        <span class="id text-muted"></span>
+    </div>
+    <div class="clearfix"></div>
+</li>
+
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<script src="http://cdn.peerjs.com/0.3/peer.js"></script>
+<script src="socket.io/socket.io.js"></script>
+<script>
+
+	$(function () {
+
+		var peer, conn;
+		var socket = io();
+
+		var rooms = []; // contains the rooms a user is in
+		
+
+		var defaultNames = ["Beep Beep I'm a Jeep", "Donut", "Stumpy", "Howard", "The Big L", "Grumpy", "Pirate"]
+		var suggestedDefaultNamePos = Math.floor((Math.random() * defaultNames.length-1) + 1); // position in the array containing default names
+		
+		function showNewDefaultName() { 
+
+			if(suggestedDefaultNamePos == 0 || suggestedDefaultNamePos == defaultNames.length-1) {
+				var l = 20;  
+			    for( var i = 0; i < 2; i++ )   
+			    	$( "form" ).animate( { 'margin-left': "+=" + ( l = -l ) + 'px' }, 50); 
+			}
+
+			$("#user").val(defaultNames[suggestedDefaultNamePos]);
+			console.log(suggestedDefaultNamePos);
+
+		};
+
+	    $('#search').addClass('open');
+	    $('#user').focus();
+	    $("#user").val(defaultNames[suggestedDefaultNamePos]);
+
+		$('#user').keydown(function (e) {
+
+			if(e.keyCode == 13) { // enter
+
+				// Close name window
+				$("#search").removeClass('open');
+				$(".colorgraph").removeClass('splash');
+				
+				var token = Math.random().toString(36).substr(2, 10); // random id for the person 
+
+				// Connect
+			    peer = new Peer(token, {host: 'localhost', port: 9000});
+	
+	    		// Trigger the user join event (we use this to communicate with users from the server)
+				socket.emit("/user/connect", { token: token, username: $("#user").val() });
+
+				e.preventDefault();
+		        return false;
+
+			} else if(e.keyCode == 38 && suggestedDefaultNamePos > 0 && suggestedDefaultNamePos < defaultNames.length) { //up
+				
+				// Select prefilled name  
+				suggestedDefaultNamePos--;
+				showNewDefaultName();
+
+			} else if(e.keyCode == 40 && suggestedDefaultNamePos >= 0 && suggestedDefaultNamePos < defaultNames.length-1) {
+
+				// Select prefilled name
+				suggestedDefaultNamePos++;
+				showNewDefaultName();
+
+			} else if(e.keyCode == 38 || e.keyCode == 40) {
+				showNewDefaultName();
+			}
+
+		});
+		
+		$("#contact-list").on("click", ".list-group-item", function() {
+
+			var roomId = $(this).find('.id').html();
+
+			// Trigger join chat event
+			socket.emit("/chat/join", roomId);
+
+			// Make a connection to the peer
+			var conn = peer.connect(roomId);
+			
+			// Add this connection to the room list
+			rooms.push(conn);
+
+		});
+		
+
+		socket.on('/user/list', function(users) {
+
+			// Update the user list
+			$("#contact-list").empty();
+			
+			for (var id in users) {
+
+				var $user = $("#example-user").clone().css("display", "visible");
+				$user.find('.name').html(users[id].username);
+				$user.find('.id').html(id);
+
+				if(Math.floor((Math.random() * 2) + 1) == 2) {
+					var gender = "men";
+				} else {
+					var gender = "women";
+				}
+
+				$user.find('img').attr("src", "http://api.randomuser.me/portraits/men/" + Math.floor((Math.random() * 100) + 1) + ".jpg");
+				$("#contact-list").append($user);
+
+			}
+
+
+		});
+
+	});
+
+</script>
+
+</body>
+</html>

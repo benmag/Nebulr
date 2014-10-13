@@ -1,0 +1,21 @@
+<html>
+<head>
+</head>
+
+<body>
+<script src="http://cdn.peerjs.com/0.3/peer.js"></script>
+<script>
+    // No API key required when not using cloud server
+    var peer = new Peer('bar', {host: 'localhost', port: 9000});
+
+    peer.on('connection', function(conn) {
+    	console.log(conn);
+		conn.on('data', function(data){
+			// Will print 'hi!'
+			console.log(data);
+		});
+	});
+
+</script>
+</body>
+</html>
