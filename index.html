@@ -127,7 +127,7 @@
 <div id="search">
     <!--<button type="button" class="close">×</button>-->
     <form>
-        <input type="search" id="user" name="user" value="" placeholder="" />
+        <input type="search" id="ident" name="ident" value="" placeholder="" />
         <!-- <button type="submit" class="btn btn-primary">Search</button> -->
     </form>
 </div>
@@ -137,7 +137,7 @@
     </div>
     <div class="col-xs-9 col-sm-9">
         <span class="name"></span><br/>
-        <span class="id text-muted"></span>
+        <span class="ident text-muted"></span>
     </div>
     <div class="clearfix"></div>
 </li>
@@ -150,12 +150,13 @@
 <script src="socket.io/socket.io.js"></script>
 <script>
 
-	$(function () {
+	// $(function () {
 
-		var peer, conn;
+		var peer;
+		var currentRoom;
 		var socket = io();
 
-		var rooms = []; // contains the rooms a user is in
+		// var myRooms = []; // contains the myRooms a user is in
 		
 
 		var defaultNames = ["Beep Beep I'm a Jeep", "Donut", "Stumpy", "Howard", "The Big L", "Grumpy", "Pirate"]
@@ -175,10 +176,10 @@
 		};
 
 	    $('#search').addClass('open');
-	    $('#user').focus();
-	    $("#user").val(defaultNames[suggestedDefaultNamePos]);
+	    $('#ident').focus();
+	    $("#ident").val(defaultNames[suggestedDefaultNamePos]);
 
-		$('#user').keydown(function (e) {
+		$('#ident').keydown(function (e) {
 
 			if(e.keyCode == 13) { // enter
 
@@ -186,13 +187,13 @@
 				$("#search").removeClass('open');
 				$(".colorgraph").removeClass('splash');
 				
-				var token = Math.random().toString(36).substr(2, 10); // random id for the person 
+				var ident = Math.random().toString(36).substr(2, 10); // random id for the person 
 
-				// Connect
-			    peer = new Peer(token, {host: 'localhost', port: 9000});
+				// Identify client ot PeerJS Server
+			    peer = new Peer(ident, {host: 'localhost', port: 9000});
 	
 	    		// Trigger the user join event (we use this to communicate with users from the server)
-				socket.emit("/user/connect", { token: token, username: $("#user").val() });
+				// socket.emit("/user/connect", { ident: ident, username: $("#user").val() });
 
 				e.preventDefault();
 		        return false;
@@ -217,46 +218,62 @@
 		
 		$("#contact-list").on("click", ".list-group-item", function() {
 
-			var roomId = $(this).find('.id').html();
+			var peerIdent = $(this).find('.ident').html();
 
 			// Trigger join chat event
-			socket.emit("/chat/join", roomId);
+			// socket.emit("/chat/join", roomId);
 
 			// Make a connection to the peer
-			var conn = peer.connect(roomId);
+			console.log("Connecting to "+ peerIdent);
+			currentRoom = peer.connect(peerIdent);
+
+			currentRoom.on('data', function(data) {
+				console.log("Got data");
+				console.log(data);
+			})
 			
 			// Add this connection to the room list
-			rooms.push(conn);
+			// myRooms.push(currentRoom);
 
 		});
 		
 
-		socket.on('/user/list', function(users) {
+		socket.on('/user/connect', function(peerId) {
 
-			// Update the user list
-			$("#contact-list").empty();
-			
-			for (var id in users) {
+			var $user = $("#example-user").clone().css("display", "visible");
+			$user.find('.name').html(peerId);
+			$user.find('.ident').html(peerId);
+			$user.attr("peerId", peerId);
 
-				var $user = $("#example-user").clone().css("display", "visible");
-				$user.find('.name').html(users[id].username);
-				$user.find('.id').html(id);
-
-				if(Math.floor((Math.random() * 2) + 1) == 2) {
-					var gender = "men";
-				} else {
-					var gender = "women";
-				}
-
-				$user.find('img').attr("src", "http://api.randomuser.me/portraits/men/" + Math.floor((Math.random() * 100) + 1) + ".jpg");
-				$("#contact-list").append($user);
-
+			if(Math.floor((Math.random() * 2) + 1) == 2) {
+				var gender = "men";
+			} else {
+				var gender = "women";
 			}
 
+			$user.find('img').attr("src", "http://api.randomuser.me/portraits/men/" + Math.floor((Math.random() * 100) + 1) + ".jpg");
+			$("#contact-list").append($user);
 
 		});
 
-	});
+		socket.on('/user/disconnect', function(peerId) {
+
+			$("#contact-list").find("[peerId='" + peerId + "']").remove();
+
+		});
+
+	// });
+
+
+		function sendMessage(message) {
+
+			currentRoom.send({
+				type: 'message',
+				value: message
+			});
+
+		}
+
 
 </script>
 

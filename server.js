@@ -9,7 +9,11 @@
  * 	group chats
  *
  * How much do we track
- *	This is a good question.
+ *	This is a good question. 
+ * 	We will use Socket.IO to help
+ * 	Socket.IO is used to track connections
+ * 	and disconnections. THAT'S IT.
+ *
  *
  */
 
@@ -28,20 +32,29 @@
  * to make it a bit more robust 
  * ... We will see.
  */
-var app = require('express')();
-var http = require('http').Server(app);
 
-app.get('/', function(req, res){
-	res.sendfile('./index.html');
-});
+var fs = require('fs');
+var http = require('http').createServer(handler)
 
-app.get('/online', function(req, res){
-	res.json({ users: onlineList});
-});
+http.listen(8080);
 
-http.listen(8080, function(){
-	console.log("~~ HTTP server started on localhost:8080 ~~")
-});
+function handler (req, res) {
+	var selectedFile;
+	selectedFile = __dirname + req.url;
+
+	fs.readFile(selectedFile,
+		function (err, data) {
+		if (err) {
+			res.writeHead(500);
+			return res.end('Error loading '+req.url);
+		}
+
+		res.writeHead(200);
+		res.end(data);
+	});
+}
+
+console.log("~~ HTTP server started on localhost:8080 ~~")
 
 
 // ~~ Peer Server
@@ -70,14 +83,18 @@ server.on('connection', function(id) {
 		fingerprint: "xx"
 	}
 
-	onlineList.push(user);
 
 	console.log(" \t Peer `" + id + "` has connected to the PeerServer");
+	onlineList.push(user);
+	io.sockets.emit('/user/connect', id);
+
 
 });
 
 server.on('disconnect', function (id) {
 	console.log(" \t Peer `" + id + "` has disconnected");
+	io.sockets.emit('/user/disconnect', id);
+
 });
 
 console.log("~~ PeerServer started on localhost:9000 ~~");
