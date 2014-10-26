@@ -32,10 +32,10 @@ Nebulr.Core = (function(self) {
 
 
 	/**
-	 * _channels 
+	 * _peers 
 	 * Rooms the user has joined
 	 */
-	_channels = null;
+	_peers = [];
 	
 	/**
 	* setIdent(ident)
@@ -59,7 +59,7 @@ Nebulr.Core = (function(self) {
 	* Sets the current users username
 	*/
 	self.setUsername = function(username) {
-		_ident = ident;
+		_username = username;
 	};
 
 	/**
@@ -70,19 +70,59 @@ Nebulr.Core = (function(self) {
 		return _username;
 	};
 
+	/** 
+	 * getChannels() 
+	 * Get all channels
+	 */
+	self.getPeers = function() {
+		return _peers;
+	};
 
 	/** 
-	 * setPeer(ident) 
-	 * Sets the PeerJS object
-	 * for the user
+	 * storePeer(conn)
+	 * Stores the Peer connection object
+	 * in an array
 	 */
-	self.createPeer = function() {
-	 	var peer = new self.Peer(self.getIdent(), _peerServerOptions);
-	 	
-	 	peer.on('open', function(id){
-		  alert(id);
-		});
+	self.storePeer = function(peer) {
+		_peers[peer.peer] = peer;
+		self.Event.trigger('joined', { ident: peer.peer });
+	};
 
+	/** 
+	 * getPeer(peer) 
+	 * Return the peer
+	 */
+	self.getPeer = function(peerId) {
+		return _peers[peerId];
+	};
+
+	/** 
+	 * disconnectPeer(peerId)
+	 * Disconnect from a channel
+	 */
+	self.disconnectPeer = function(peerId) {
+
+	};
+
+	/** 
+	 * createPeer(ident) 
+	 * Creates a new PeerJS object
+	 */
+	self.createPeerObj = function() {
+
+	    var peer = new self.Peer(self.getIdent(), {host: 'localhost', port: 9000});
+	    peer.on('connection', function(conn) {
+
+			conn.on('data', function(data){
+				
+				self.Event.trigger('receiveMessage', data);
+
+			});
+
+			
+	    	// self.storePeer(conn);
+		});
+		    
 		return peer;
 
 	};
@@ -100,10 +140,42 @@ Nebulr.Core = (function(self) {
 	  * getPeer()
 	  * Gets the PeerJS object
 	  */
-	self.getPeer = function() {
+	self.getPeerClient = function() {
 	 	return _peer;
 	};
 
+
+	/**
+	 * connectToPeer(peerId) 
+	 * Make a connection with another peer
+	 */
+	self.connectToPeer = function(peerId) {
+		
+		self.Event.trigger('cmdJoin', peerId);
+		
+		var peer = self.getPeerClient();
+	    var conn = peer.connect(peerId);
+		conn.on('open', function(){
+	  		// console.log("Sending message to host2");
+	  		// event connected
+	  		// send the conversation info through?
+		});
+
+		self.storePeer(conn);
+		
+
+	};
+
+
+	/** 
+	 * send(peerId) 
+	 * Send a message to a peer
+	 */
+	self.send = function(send) {
+
+		self.getPeer(send.peerId).send({ ident: self.getIdent(), username: self.getUsername(), message: send.message});
+
+	};
 
 	return self;
 

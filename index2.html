@@ -45,7 +45,7 @@
 	    left: 0px;
 	    width: 100%;
 	    height: 100%;
-	    z-index: 200;
+	    z-index: 4000;
 	    /*background-color: rgba(0, 0, 0, 0.7);*/
 	    background-color: #ec5148;
 	    -webkit-transition: all 0.5s ease-in-out;
@@ -111,10 +111,204 @@
 	.list-group-item {
 		cursor: pointer;
 	}
+
+/* CSS used here will be applied after bootstrap.css */
+html, body { height: 100%;}
+
+/* So that the modal is displayed in the preview.. You can probably remove this and the above rule */
+.img-modal {
+	position: relative;
+	display: block;
+}
+
+.img-modal .modal-dialog {
+    /* An arbitrary minimum height. Feel free to modify this one as well */
+    min-height: 350px;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;	
+}
+
+.img-modal .modal-content, .img-modal .modal-body, .img-modal .row, .img-modal .modal-image {
+    height: 100%;
+}
+
+.modal-content {
+    border-radius: 0;
+    border: 0px !important;
+}
+
+.modal-body {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.modal-image {
+	background-color: #ec5148;
+    padding :0;
+}
+
+.modal-image img {
+    margin: 0 auto;
+    max-height: 100%;
+    max-width: 100%;
+    
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.img-modal .img-modal-btn {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: black;
+    opacity: 0;
+    font-size: 1.5em;
+    width: 45px;
+    color: #fff;
+    transition: opacity .2s ease-in;
+}
+
+.img-modal .modal-image:hover .img-modal-btn {
+    opacity: 0.4;  
+}
+
+.img-modal .modal-image:hover .img-modal-btn:hover {
+   opacity: 0.75;   
+}
+
+.img-modal .img-modal-btn.right {
+    right: 0;
+}
+
+.img-modal .img-modal-btn i {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    margin-top: -.75em;
+}
+
+.img-modal .modal-meta {
+    position: relative;   
+    height: 100%;
+}
+
+.img-modal .modal-meta-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 45px;
+    padding: 5px 10px;
+    overflow-y: auto;
+}
+
+.img-modal .modal-meta-top .img-poster img {
+    height: 70px;
+    width: 70px;
+    float: left;
+    margin-right: 15px;
+}
+
+.img-modal .modal-meta-top .img-poster strong {
+    display: block; 
+    padding-top: 15px;
+}
+
+.img-modal .modal-meta-top .img-poster span {
+    display: block;   
+    color: #aaa;
+    font-size:.9em;
+}
+
+.img-modal .modal-meta-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 5px;
+    border-top: solid 1px #ccc;
+}
+
+.img-modal .chatlog {
+    list-style: none;  
+    padding: 0;
+}
+.img-modal .chatlog li {
+    margin:0;
+    margin-top:10px;
+}
+
+.img-modal .chatlog li > div {
+    display:table-cell;
+}
+
+.img-modal .chatlog img {
+    border-radius:50%;
+    width: 42px;
+    height: 42px;
+    margin-right: 10px;
+    margin-top: 20px;
+}
+
+.img-modal .chatlog p {
+    margin: 0;
+}
+
+.img-modal .chatlog span {
+    font-size: .8em; 
+    color: #aaa;
+}
+
 	</style>
 </head>
 
 <body>
+<div class="modal img-modal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-md-8 modal-image">
+            	<div style="position:fixed;top:0;left:0; width:350px; 	background-color: rgba(0,0,0,0.3)">
+            		<h1 id="username"></h1>
+            		<span id="userIdent"></span>
+            	</div>
+                <img class="img-responsive" src="lunar.png" />
+                <img class="img-responsive hidden" src="http://www.netflights.com/media/216535/hong%20kong_03_681x298.jpg" />
+                <!-- <a href="" class="img-modal-btn left"><i class="glyphicon glyphicon-chevron-left"></i></a> -->
+                <!-- <a href="" class="img-modal-btn right"><i class="glyphicon glyphicon-chevron-right"></i></a> -->
+          	</div>
+        	<div class="col-md-4 col-xs-12 modal-meta">
+        		<hr class="colorgraph" style="position:absolute; top:0; left:0; right: 0;">
+				<div class="modal-meta-top" style="padding-top: 15px;">
+					<button type="button" class="close"><span aria-hidden="true"><i class="glyphicon glyphicon-remove"></i></span><span class="sr-only">Close</span></button>
+					<div class="img-poster clearfix">
+						<a href=""><img class="img-circle" src="http://www.localcrimenews.com/wp-content/uploads/2013/07/default-user-icon-profile.png"/></a>
+						<strong><a id="convTitle" href=""></a></strong>
+						<span id="convIdent"></span>
+					</div>
+				  
+			  		<ul id="chatlog" class="chatlog">
+					</ul>
+				</div>
+				<div class="modal-meta-bottom">
+				  <input id="input" type="text" class="form-control" placeholder="Enter a message or command... Press ctrl+h for help" />
+				</div>
+          	</div>
+        </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+
 	<!-- http://bootsnipp.com/snippets/featured/google-plus-styled-post -->
 <hr class="colorgraph">
 	<div class="row">
@@ -161,11 +355,36 @@
 <!-- <script src="js/chat.js"></script> -->
 <script>
 
-	
 	Nebulr.init();
 
-	// Nebulr.Client.setIdent("BenMaggacis");
-	// console.log(Nebulr.Client.getIdent());
+	$(function(){
+	    // This code is not even almost production ready. It's 2am here, and it's a cheap proof-of-concept if anything.
+	    $(".img-modal-btn.right").on('click', function(e){
+	        e.preventDefault();
+	        cur = $(this).parent().find('img:visible()');
+	        next = cur.next('img');
+	        par = cur.parent();
+	        if (!next.length) { next = $(cur.parent().find("img").get(0)) }
+	        cur.addClass('hidden');
+	        next.removeClass('hidden');
+	        
+	        return false;
+	    })
+	    
+	    $(".img-modal-btn.left").on('click', function(e){
+	        e.preventDefault();
+	        cur = $(this).parent().find('img:visible()');
+	        next = cur.prev('img');
+	        par = cur.parent();
+	        children = cur.parent().find("img");
+	        if (!next.length) { next = $(children.get(children.length-1)) }
+	        cur.addClass('hidden');
+	        next.removeClass('hidden');
+	        
+	        return false;
+	    })
+
+	});
 
 </script>
 
