@@ -52,7 +52,15 @@ Nebulr.Client = (function(self) {
 	 * Array containing some funny
 	 * suggested names that users can use
 	 */
-	_defaultNames = ["Beep Beep I'm a Jeep", "Donut", "Stumpy", "Howard", "The Big L", "Grumpy", "Pirate"],
+	_defaultNames = [
+		"Beep Beep I'm a Jeep", "Donut", "Penguin", "Stumpy", 
+		"Whicker", "Shadow", "Howard", "Wilshire", "Darling", "Disco", 
+		"Jack", "The Bear", "Sneak", "The Big L", "Whisp", "Wheezy", 
+		"Crazy", "Goat", "Pirate", "Saucy", "Hambone", "Butcher", 
+		"Walla Walla", "Snake", "Caboose", "Sleepy", "Killer", "Stompy", 
+		"Mopey", "Dopey", "Weasel", "Ghost", "Dasher", "Grumpy", "Hollywood", 
+		"Tooth", "Noodle", "King", "Cupid", "Prancer"
+	],
 
 	/**
 	 * _suggestedDefaultNamePos
