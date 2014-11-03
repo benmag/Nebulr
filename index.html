@@ -39,13 +39,13 @@
 		font-weight: 700;
 	}
 
-	#search {
+	#connectOverlay {
 	    position: fixed;
 	    top: 0px;
 	    left: 0px;
 	    width: 100%;
 	    height: 100%;
-	    z-index: 200;
+	    z-index: 4000;
 	    /*background-color: rgba(0, 0, 0, 0.7);*/
 	    background-color: #ec5148;
 	    -webkit-transition: all 0.5s ease-in-out;
@@ -63,7 +63,7 @@
 	    opacity: 0;
 	}
 
-	#search.open {
+	#connectOverlay.open {
 	    -webkit-transform: translate(0px, 0px) scale(1, 1);
 	    -moz-transform: translate(0px, 0px) scale(1, 1);
 		-o-transform: translate(0px, 0px) scale(1, 1);
@@ -72,7 +72,7 @@
 	    opacity: 1;
 	}
 
-	#search input[type="search"] {
+	#connectOverlay input[type="text"] {
 	    position: absolute;
 	    top: 50%;
 	    width: 100%;
@@ -89,14 +89,14 @@
 	    padding-right: 30px;
 	    outline: none;
 	}
-	#search .btn {
+	#connectOverlay .btn {
 	    position: absolute;
 	    top: 50%;
 	    left: 50%;
 	    margin-top: 61px;
 	    margin-left: -45px;
 	}
-	#search .close {
+	#connectOverlay .close {
 	    position: fixed;
 	    top: 15px;
 	    right: 15px;
@@ -111,12 +111,214 @@
 	.list-group-item {
 		cursor: pointer;
 	}
+
+/* CSS used here will be applied after bootstrap.css */
+html, body { height: 100%;}
+
+/* So that the modal is displayed in the preview.. You can probably remove this and the above rule */
+.img-modal {
+	position: relative;
+	display: block;
+}
+
+.img-modal .modal-dialog {
+    /* An arbitrary minimum height. Feel free to modify this one as well */
+    min-height: 350px;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;	
+}
+
+.img-modal .modal-content, .img-modal .modal-body, .img-modal .row, .img-modal .modal-image {
+    height: 100%;
+}
+
+.modal-content {
+    border-radius: 0;
+    border: 0px !important;
+}
+
+.modal-body {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.modal-image {
+	background-color: #ec5148;
+    padding :0;
+}
+
+.modal-image img {
+    margin: 0 auto;
+    max-height: 100%;
+    max-width: 100%;
+    
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.img-modal .img-modal-btn {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: black;
+    opacity: 0;
+    font-size: 1.5em;
+    width: 45px;
+    color: #fff;
+    transition: opacity .2s ease-in;
+}
+
+.img-modal .modal-image:hover .img-modal-btn {
+    opacity: 0.4;  
+}
+
+.img-modal .modal-image:hover .img-modal-btn:hover {
+   opacity: 0.75;   
+}
+
+.img-modal .img-modal-btn.right {
+    right: 0;
+}
+
+.img-modal .img-modal-btn i {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    margin-top: -.75em;
+}
+
+.img-modal .modal-meta {
+    position: relative;   
+    height: 100%;
+}
+
+.img-modal .modal-meta-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 45px;
+    padding: 5px 10px;
+    overflow-y: auto;
+}
+
+.img-modal .modal-meta-top .img-poster img {
+    height: 70px;
+    width: 70px;
+    float: left;
+    margin-right: 15px;
+}
+
+.img-modal .modal-meta-top .img-poster strong {
+    display: block; 
+    padding-top: 15px;
+}
+
+.img-modal .modal-meta-top .img-poster span {
+    display: block;   
+    color: #aaa;
+    font-size:.9em;
+}
+
+.img-modal .modal-meta-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 5px;
+    border-top: solid 1px #ccc;
+}
+
+.img-modal .chatlog {
+    list-style: none;  
+    padding: 0;
+}
+.img-modal .chatlog li {
+    margin:0;
+    margin-top:10px;
+}
+
+.img-modal .chatlog li > div {
+    display:table-cell;
+}
+
+.img-modal .chatlog img {
+    border-radius:50%;
+    width: 42px;
+    height: 42px;
+    margin-right: 10px;
+    margin-top: 20px;
+}
+
+.img-modal .chatlog p {
+    margin: 0;
+}
+
+.img-modal .chatlog span {
+    font-size: .8em; 
+    color: #aaa;
+}
+
 	</style>
 </head>
 
 <body>
+<div class="modal img-modal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-md-8 modal-image">
+            	<div style="position:fixed;top:0;left:0; width:350px; 	background-color: rgba(0,0,0,0.3)">
+            		<h1 id="username"></h1>
+            		<span id="userIdent"></span>
+            	</div>
+                <!-- <img class="img-responsive" src="lunar.png" /> -->
+                <!-- <img class="img-responsive hidden" src="http://www.netflights.com/media/216535/hong%20kong_03_681x298.jpg" /> -->
+                <!-- <a href="" class="img-modal-btn left"><i class="glyphicon glyphicon-chevron-left"></i></a> -->
+                <!-- <a href="" class="img-modal-btn right"><i class="glyphicon glyphicon-chevron-right"></i></a> -->
+          	</div>
+        	<div class="col-md-4 col-xs-12 modal-meta">
+        		<hr class="colorgraph" style="position:absolute; top:0; left:0; right: 0;">
+				<div class="modal-meta-top" style="padding-top: 15px;">
+					<button type="button" class="close"><span aria-hidden="true"><i class="glyphicon glyphicon-remove"></i></span><span class="sr-only">Close</span></button>
+					<div class="img-poster clearfix">
+						<a href=""><img class="img-circle" src="http://www.localcrimenews.com/wp-content/uploads/2013/07/default-user-icon-profile.png"/></a>
+						<strong><a id="convTitle" href=""></a></strong>
+						<span id="convIdent"></span>
+					</div>
+				  
+			  		<ul id="chatlog" class="chatlog">
+					</ul>
+				</div>
+				<div class="modal-meta-bottom">
+				  <input id="input" type="text" class="form-control" placeholder="Enter a message or command... Press ctrl+h for help" />
+				</div>
+          	</div>
+        </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+
+	<!-- http://bootsnipp.com/snippets/featured/google-plus-styled-post -->
 <hr class="colorgraph">
-<div class="row">
+	<div class="row">
+		<div class="col-sm-8 col-sm-offset-2">
+			<input class="col-sm-8" type="text" placeholder="Enter ID of peer to connect with" id="connectWith" value="" />
+			<input class="col-sm-3 col-sm-offset-1" type="submit" id="makeConnection" />
+		</div>
+	</div>
+	<br />
+	<div class="row">
     <div class="col-xs-12 col-sm-offset-3 col-sm-6">
         <div class="panel panel-default">
             <ul class="list-group" id="contact-list">
@@ -124,11 +326,9 @@
         </div>
     </div>
 </div>
-<div id="search">
-    <!--<button type="button" class="close">×</button>-->
-    <form>
-        <input type="search" id="ident" name="ident" value="" placeholder="" />
-        <!-- <button type="submit" class="btn btn-primary">Search</button> -->
+<div id="connectOverlay">
+    <form id="connectForm" method="post" autocomplete="off">
+        <input type="text" id="ident" name="ident" autocomplete="off" value="" placeholder="" />
     </form>
 </div>
 <li id="example-user" class="list-group-item" style="display:none;">
@@ -145,135 +345,46 @@
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-
 <script src="http://cdn.peerjs.com/0.3/peer.js"></script>
 <script src="socket.io/socket.io.js"></script>
+
+<script src="js/nebulr.js"></script>
+<script src="js/core.js"></script>
+<script src="js/client/client.js"></script>
+<script src="js/client/event.js"></script>
+<!-- <script src="js/chat.js"></script> -->
 <script>
 
-	// $(function () {
+	Nebulr.init();
 
-		var peer;
-		var currentRoom;
-		var socket = io();
+	$(function(){
+	    // This code is not even almost production ready. It's 2am here, and it's a cheap proof-of-concept if anything.
+	    $(".img-modal-btn.right").on('click', function(e){
+	        e.preventDefault();
+	        cur = $(this).parent().find('img:visible()');
+	        next = cur.next('img');
+	        par = cur.parent();
+	        if (!next.length) { next = $(cur.parent().find("img").get(0)) }
+	        cur.addClass('hidden');
+	        next.removeClass('hidden');
+	        
+	        return false;
+	    })
+	    
+	    $(".img-modal-btn.left").on('click', function(e){
+	        e.preventDefault();
+	        cur = $(this).parent().find('img:visible()');
+	        next = cur.prev('img');
+	        par = cur.parent();
+	        children = cur.parent().find("img");
+	        if (!next.length) { next = $(children.get(children.length-1)) }
+	        cur.addClass('hidden');
+	        next.removeClass('hidden');
+	        
+	        return false;
+	    })
 
-		// var myRooms = []; // contains the myRooms a user is in
-		
-
-		var defaultNames = ["Beep Beep I'm a Jeep", "Donut", "Stumpy", "Howard", "The Big L", "Grumpy", "Pirate"]
-		var suggestedDefaultNamePos = Math.floor((Math.random() * defaultNames.length-1) + 1); // position in the array containing default names
-		
-		function showNewDefaultName() { 
-
-			if(suggestedDefaultNamePos == 0 || suggestedDefaultNamePos == defaultNames.length-1) {
-				var l = 20;  
-			    for( var i = 0; i < 2; i++ )   
-			    	$( "form" ).animate( { 'margin-left': "+=" + ( l = -l ) + 'px' }, 50); 
-			}
-
-			$("#user").val(defaultNames[suggestedDefaultNamePos]);
-			console.log(suggestedDefaultNamePos);
-
-		};
-
-	    $('#search').addClass('open');
-	    $('#ident').focus();
-	    $("#ident").val(defaultNames[suggestedDefaultNamePos]);
-
-		$('#ident').keydown(function (e) {
-
-			if(e.keyCode == 13) { // enter
-
-				// Close name window
-				$("#search").removeClass('open');
-				$(".colorgraph").removeClass('splash');
-				
-				var ident = Math.random().toString(36).substr(2, 10); // random id for the person 
-
-				// Identify client ot PeerJS Server
-			    peer = new Peer(ident, {host: 'localhost', port: 9000});
-	
-	    		// Trigger the user join event (we use this to communicate with users from the server)
-				// socket.emit("/user/connect", { ident: ident, username: $("#user").val() });
-
-				e.preventDefault();
-		        return false;
-
-			} else if(e.keyCode == 38 && suggestedDefaultNamePos > 0 && suggestedDefaultNamePos < defaultNames.length) { //up
-				
-				// Select prefilled name  
-				suggestedDefaultNamePos--;
-				showNewDefaultName();
-
-			} else if(e.keyCode == 40 && suggestedDefaultNamePos >= 0 && suggestedDefaultNamePos < defaultNames.length-1) {
-
-				// Select prefilled name
-				suggestedDefaultNamePos++;
-				showNewDefaultName();
-
-			} else if(e.keyCode == 38 || e.keyCode == 40) {
-				showNewDefaultName();
-			}
-
-		});
-		
-		$("#contact-list").on("click", ".list-group-item", function() {
-
-			var peerIdent = $(this).find('.ident').html();
-
-			// Trigger join chat event
-			// socket.emit("/chat/join", roomId);
-
-			// Make a connection to the peer
-			console.log("Connecting to "+ peerIdent);
-			currentRoom = peer.connect(peerIdent);
-
-			currentRoom.on('data', function(data) {
-				console.log("Got data");
-				console.log(data);
-			})
-			
-			// Add this connection to the room list
-			// myRooms.push(currentRoom);
-
-		});
-		
-
-		socket.on('/user/connect', function(peerId) {
-
-			var $user = $("#example-user").clone().css("display", "visible");
-			$user.find('.name').html(peerId);
-			$user.find('.ident').html(peerId);
-			$user.attr("peerId", peerId);
-
-			if(Math.floor((Math.random() * 2) + 1) == 2) {
-				var gender = "men";
-			} else {
-				var gender = "women";
-			}
-
-			$user.find('img').attr("src", "http://api.randomuser.me/portraits/men/" + Math.floor((Math.random() * 100) + 1) + ".jpg");
-			$("#contact-list").append($user);
-
-		});
-
-		socket.on('/user/disconnect', function(peerId) {
-
-			$("#contact-list").find("[peerId='" + peerId + "']").remove();
-
-		});
-
-	// });
-
-
-		function sendMessage(message) {
-
-			currentRoom.send({
-				type: 'message',
-				value: message
-			});
-
-		}
-
+	});
 
 </script>
 
