@@ -106,11 +106,12 @@ Nebulr.Core = (function(self) {
 
 	/** 
 	 * createPeer(ident) 
-	 * Creates a new PeerJS object
+	 * Connects and creates a 
+	 * new PeerJS object
 	 */
 	self.createPeerObj = function() {
 
-	    var peer = new self.Peer(self.getIdent(), {host: 'localhost', port: 9000});
+	    var peer = new self.Peer(self.getIdent(), {host: _peerServerOptions.host, port: _peerServerOptions.port});
 	    peer.on('connection', function(conn) {
 
 			conn.on('data', function(data){
